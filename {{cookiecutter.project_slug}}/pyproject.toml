@@ -1,0 +1,26 @@
+[tool.black]
+target_version = ["py38"]
+
+[tool.coverage.report]
+skip_empty = true
+
+[tool.coverage.run]
+branch = true
+
+[tool.isort]
+profile = "black"
+src_paths = ["app"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = """
+    --quiet
+
+    --black
+    --flake8
+    --isort
+    --mypy
+
+    --cov=app
+    --durations=3
+"""

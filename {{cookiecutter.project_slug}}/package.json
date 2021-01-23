@@ -1,0 +1,9 @@
+{
+  "name": "{{ cookiecutter.project_service_name }}",
+  "description": "",
+  "version": "0.1.0",
+  "devDependencies": {
+    "serverless": "^2.21.1",
+    "serverless-offline": "^6.8.0"
+  }
+}
