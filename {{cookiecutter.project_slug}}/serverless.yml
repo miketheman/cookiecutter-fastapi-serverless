@@ -1,0 +1,76 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# For full config options, check the docs:
+#    https://www.serverless.com/framework/docs/
+#
+# Happy Coding!
+frameworkVersion: '2'
+
+service: {{ cookiecutter.project_service_name }}
+
+# Load environment variables from .env* files
+# https://www.serverless.com/framework/docs/environment-variables/
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: python3.8
+  deploymentBucket:
+    # Prevent future unintentional S3 Bucket leaks
+    blockPublicAccess: true
+  lambdaHashingVersion: 20201221
+  logs:
+    httpApi: true
+  # Prevent costs from ever-increasing
+  logRetentionInDays: 14
+  # Values exist in compiled artifacts in S3.
+  # https://www.serverless.com/framework/docs/providers/aws/guide/variables
+  environment:
+    # ${env:*} variables are injected from the build-time environment.
+    PROJECT_NAME: ${env:PROJECT_NAME}
+
+package:
+  exclude:
+    # Remove any non-essential files from the deployment package
+    - .direnv/**
+    - .editorconfig
+    - .env*
+    - venv/**
+    - .idea/**
+    - .vscode/**
+    - package*.json
+    - Pipfile*
+    - requirements.txt
+    - setup.cfg
+    - pyproject.toml
+    - node_modules/**
+    - .mypy_cache/**
+    - .pytest_cache/**
+    - .coverage
+    - htmlcov/**
+    - main.py
+    - tests/**
+
+functions:
+  app:
+    handler: app.asgi.handler
+    events:
+      - httpApi:
+          method: '*'
+          # See https://github.com/dherault/serverless-offline/issues/1118
+          path: ${env:CATCHALL_ROUTE, '*'}
+
+plugins:
+  - serverless-offline
+  - serverless-python-requirements
+custom:
+  pythonRequirements:
+    # Use Docker to compile any C extensions for AWS Lambda platform.
+    # `pydantic` will Cython-compile for a speed boost at the expense of larger
+    # deployment package: ~12 MB vs ~600 KB
+    # dockerizePip: non-linux
+  serverless-offline:
+    # Remove the API Gateway REST API `/dev` stage prefix.
+    # https://github.com/dherault/serverless-offline/issues/1118
+    noPrependStageInUrl: true

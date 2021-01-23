@@ -1,0 +1,9 @@
+{
+  "full_name": "Mike Fiedler",
+  "email": "miketheman@example.com",
+  "github_username": "miketheman",
+  "project_name": "FastAPI Template",
+  "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
+  "project_service_name": "{{ cookiecutter.project_name.replace(' ', '-') }}",
+  "open_source_license": ["MIT License", "ISC License", "Apache License 2.0", "Not open source"]
+}
